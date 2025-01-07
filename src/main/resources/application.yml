@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: ani-cinema
+  profiles:
+    active: loc
