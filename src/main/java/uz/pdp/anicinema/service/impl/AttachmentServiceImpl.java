@@ -1,10 +1,17 @@
 package uz.pdp.anicinema.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.anicinema.entity.Attachment;
 import uz.pdp.anicinema.exception.BadRequestException;
+import uz.pdp.anicinema.mapper.AttachmentMapper;
+import uz.pdp.anicinema.payload.response.AttachmentResponse;
 import uz.pdp.anicinema.repository.AttachmentRepository;
 import uz.pdp.anicinema.service.AttachmentService;
 
@@ -14,8 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import static uz.pdp.anicinema.exception.BadRequestException.fileNotValid;
-import static uz.pdp.anicinema.utils.contant.AppConstant.BASE_ATTACHMENT_PATH;
-import static uz.pdp.anicinema.utils.contant.AppConstant.BASE_URL;
+import static uz.pdp.anicinema.utils.contant.AppConstant.*;
 
 
 @Service
@@ -23,9 +29,10 @@ import static uz.pdp.anicinema.utils.contant.AppConstant.BASE_URL;
 public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
+    private final AttachmentMapper attachmentMapper;
 
     @Override
-    public Attachment save(MultipartFile file) {
+    public AttachmentResponse save(MultipartFile file) {
 
         try {
 
@@ -35,8 +42,9 @@ public class AttachmentServiceImpl implements AttachmentService {
 
             Attachment attachment = Attachment.builder()
                     .fileName(filename)
+                    .type(file.getContentType())
                     .path(path.toString())
-                    .url(BASE_URL + "/api/v1/attachment/" + filename)
+                    .url(ATTACHMENT_URL + filename)
                     .build();
             if (!BASE_ATTACHMENT_PATH.toFile().exists()) {
                 Files.createDirectories(BASE_ATTACHMENT_PATH);
@@ -44,7 +52,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-            return attachmentRepository.save(attachment);
+            return attachmentMapper.toResponse(attachmentRepository.save(attachment));
 
         }catch (Exception e){
             throw fileNotValid();
@@ -53,11 +61,32 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public Attachment getByFilename(String filename) {
+    public ResponseEntity<InputStreamResource> download(String filename) {
 
-        return attachmentRepository.findByFileName(filename)
-                .orElseThrow(BadRequestException::fileNotValid);
+        try {
+            Attachment attachment = attachmentRepository.findByFileName(filename)
+                    .orElseThrow(BadRequestException::fileNotValid);
 
+            Path path = Path.of(attachment.getPath());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(attachment.getType()));
+            headers.setContentDisposition(ContentDisposition.attachment()
+                    .filename(attachment.getFileName())
+                    .build());
+
+            InputStreamResource resource = new InputStreamResource(Files.newInputStream(path));
+            return ResponseEntity.ok().headers(headers).body(resource);
+
+        }catch (Exception e){
+            throw fileNotValid();
+        }
+    }
+
+    @Override
+    public AttachmentResponse getById(Long id) {
+        return attachmentMapper.toResponse(attachmentRepository.findById(id)
+                .orElseThrow(BadRequestException::fileNotValid));
     }
 
     private String getExtension(String contentType) {

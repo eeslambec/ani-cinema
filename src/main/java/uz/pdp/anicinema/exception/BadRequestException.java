@@ -3,10 +3,8 @@ package uz.pdp.anicinema.exception;
 import lombok.Getter;
 import uz.pdp.anicinema.utils.enums.Code;
 
-import static uz.pdp.anicinema.utils.contant.MessageKey.ATTACHMENT_NOT_FOUND;
-import static uz.pdp.anicinema.utils.contant.MessageKey.FILE_NOT_VALID;
-import static uz.pdp.anicinema.utils.enums.Code.DATA_NOT_FOUND;
-import static uz.pdp.anicinema.utils.enums.Code.INVALID_DATA;
+import static uz.pdp.anicinema.utils.contant.MessageKey.*;
+import static uz.pdp.anicinema.utils.enums.Code.*;
 
 @Getter
 public class BadRequestException extends RuntimeException {
@@ -18,7 +16,7 @@ public class BadRequestException extends RuntimeException {
         this.code = code;
     }
 
-    public static BadRequestException badRequestException(String key, Code code) {
+    private static BadRequestException badRequestException(String key, Code code) {
         return new BadRequestException(key, code);
     }
 
@@ -29,5 +27,31 @@ public class BadRequestException extends RuntimeException {
     public static BadRequestException attachmentNotFound() {
         return badRequestException(ATTACHMENT_NOT_FOUND,DATA_NOT_FOUND);
     }
+
+    public static BadRequestException userAlreadyExists() {
+        return badRequestException(USER_ALREADY_EXISTS,DATA_ALREADY_EXISTS);
+    }
+
+    public static BadRequestException userNotFound() {
+        return badRequestException(USER_NOT_FOUND,DATA_NOT_FOUND);
+    }
+
+    public static BadRequestException emailNoValid() {
+        return badRequestException(EMAIL_NOT_VALID,INVALID_DATA);
+    }
+
+    public static BadRequestException passwordNoValid() {
+        return badRequestException(PASSWORD_NOT_VALID,INVALID_DATA);
+    }
+
+    public static BadRequestException tokenIsExpired() {
+        return badRequestException(TOKEN_IS_EXPIRED,TOKEN_EXPIRED);
+    }
+
+    public static BadRequestException verificationCodeInvalid() {
+        return badRequestException(VERIFICATION_CODE_NOT_VALID,INVALID_DATA);
+    }
+
+
 
 }

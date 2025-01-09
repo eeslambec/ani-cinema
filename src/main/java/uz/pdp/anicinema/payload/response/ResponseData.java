@@ -12,7 +12,6 @@ import uz.pdp.anicinema.utils.enums.Code;
 
 import static uz.pdp.anicinema.utils.enums.Code.SUCCESS;
 
-
 @Getter
 @Setter
 @ToString

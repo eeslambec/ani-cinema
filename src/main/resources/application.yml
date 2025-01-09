@@ -1,5 +1,23 @@
 spring:
   application:
     name: ani-cinema
+
   profiles:
     active: loc
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: abduganiyev.ismoil001@gmail.com
+    password: lkeu ioml dypp zwed
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
