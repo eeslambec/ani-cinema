@@ -17,6 +17,7 @@ public class MessageKey {
     public static final String USER_NOT_FOUND = "user.not.found";
     public static final String TOKEN_IS_EXPIRED = "token.is.expired";
     public static final String PARAMETERS_NOT_VALID = "params.not.valid";
-    public static final String MAX_SIZE = "max.size.file";
-
+    public static final String MOVIE_NOT_FOUND = "movie.not.found";
+    public static final String EPISODE_NOT_FOUND = "episode.not.found";
+    public static final String ID_NOT_VALID = "id.not.valid";
 }

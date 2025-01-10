@@ -13,4 +13,6 @@ public interface AttachmentService {
     AttachmentResponse save(MultipartFile file);
     ResponseEntity<InputStreamResource> download(String filename);
     AttachmentResponse getById(Long id);
+    Attachment findById(Long id);
+
 }

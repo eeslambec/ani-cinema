@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("is_active = true")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +47,8 @@ public class Movie {
     private String genre;
 
     private String releasedCountry;
+
+    private Boolean isActive;
 
     @ManyToOne
     private Trailer trailer;

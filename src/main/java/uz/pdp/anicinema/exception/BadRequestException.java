@@ -52,6 +52,11 @@ public class BadRequestException extends RuntimeException {
         return badRequestException(VERIFICATION_CODE_NOT_VALID,INVALID_DATA);
     }
 
+    public static BadRequestException movieNotFound() {
+        return badRequestException(MOVIE_NOT_FOUND, DATA_NOT_FOUND);
+    }
 
-
+    public static BadRequestException episodeNotFound() {
+        return badRequestException(EPISODE_NOT_FOUND, DATA_NOT_FOUND);
+    }
 }

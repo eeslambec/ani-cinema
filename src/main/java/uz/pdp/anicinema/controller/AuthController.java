@@ -13,10 +13,12 @@ import uz.pdp.anicinema.utils.contant.MessageKey;
 import uz.pdp.anicinema.utils.enums.Code;
 
 import static uz.pdp.anicinema.payload.response.ResponseData.*;
+import static uz.pdp.anicinema.utils.contant.AppConstant.API_V1;
+import static uz.pdp.anicinema.utils.contant.AppConstant.AUTH;
 
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping(API_V1 + AUTH)
 @RequiredArgsConstructor
 public class AuthController {
 

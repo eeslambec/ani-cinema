@@ -65,7 +65,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
         try {
             Attachment attachment = attachmentRepository.findByFileName(filename)
-                    .orElseThrow(BadRequestException::fileNotValid);
+                    .orElseThrow(BadRequestException::attachmentNotFound);
 
             Path path = Path.of(attachment.getPath());
 
@@ -86,7 +86,13 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public AttachmentResponse getById(Long id) {
         return attachmentMapper.toResponse(attachmentRepository.findById(id)
-                .orElseThrow(BadRequestException::fileNotValid));
+                .orElseThrow(BadRequestException::attachmentNotFound));
+    }
+
+    @Override
+    public Attachment findById(Long id) {
+        return attachmentRepository.findById(id)
+                .orElseThrow(BadRequestException::attachmentNotFound);
     }
 
     private String getExtension(String contentType) {
