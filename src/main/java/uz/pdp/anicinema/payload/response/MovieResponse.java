@@ -16,7 +16,11 @@ public class MovieResponse {
 
     private String description;
 
-    private Long thumbnailId;
+    private String thumbnail;
+
+    private String genre;
+
+    private String type;
 
     private String director;
 
@@ -24,20 +28,13 @@ public class MovieResponse {
 
     private Double rating;
 
-    private String genre;
-
     private String releasedCountry;
 
     private Boolean isActive;
 
     private Trailer trailer;
 
-    private Long bannerId;
+    private String banner;
 
-    private List<Long> screenshotIds;
-
-    private List<Long> episodeIds;
-
-    private List<Long> commentIds;
-
+    private List<String> screenshots;
 }

@@ -21,6 +21,7 @@ import uz.pdp.anicinema.utils.validator.RegexValidator;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -44,11 +45,42 @@ public class UserServiceImpl implements UserService {
             throw BadRequestException.passwordNoValid();
         }
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+
+        if (optionalUser.isPresent()) {
+
+            User user = optionalUser.get();
+
+            if(user.getStatus() == UserStatus.NOT_VERIFIED) {
+
+                mailService.sendVerificationCode(request.getEmail());
+
+                return;
+
+            }
 
             throw BadRequestException.userAlreadyExists();
 
         }
+
+        optionalUser = userRepository.findByUsername(request.getUsername());
+
+        if (optionalUser.isPresent()) {
+
+            User user = optionalUser.get();
+
+            if(user.getStatus() == UserStatus.NOT_VERIFIED) {
+
+                mailService.sendVerificationCode(request.getEmail());
+
+                return;
+
+            }
+
+            throw BadRequestException.userAlreadyExists();
+
+        }
+
 
         User user = User.builder()
                 .username(request.getUsername())

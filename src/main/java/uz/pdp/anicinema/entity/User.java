@@ -48,6 +48,7 @@ public class User {
 
     private BigDecimal balance;
 
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     private Long lvl;
@@ -55,7 +56,6 @@ public class User {
     private Long lastLogin;
 
     @ManyToOne
-    @Enumerated(EnumType.STRING)
     private Subscription subscription;
 
     @ManyToMany(fetch = FetchType.EAGER)

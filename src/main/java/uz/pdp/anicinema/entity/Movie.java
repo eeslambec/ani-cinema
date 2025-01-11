@@ -1,21 +1,14 @@
 package uz.pdp.anicinema.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
+import uz.pdp.anicinema.utils.enums.MovieStatus;
 
 import java.util.List;
 
@@ -44,11 +37,20 @@ public class Movie {
 
     private Double rating;
 
-    private String genre;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Genre genre;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private MovieType type;
 
     private String releasedCountry;
 
     private Boolean isActive;
+
+    private Boolean isReleased;
+
+    @Enumerated(EnumType.STRING)
+    private MovieStatus status;
 
     @ManyToOne
     private Trailer trailer;
@@ -82,4 +84,11 @@ public class Movie {
 
     )
     private List<Comment> comments;
+
+    @OneToOne
+    private Movie previousSeason;
+
+    @OneToOne
+    private Movie nextSeason;
+
 }

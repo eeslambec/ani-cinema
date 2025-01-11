@@ -2,16 +2,21 @@ package uz.pdp.anicinema.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.pdp.anicinema.entity.Genre;
 import uz.pdp.anicinema.entity.Movie;
+import uz.pdp.anicinema.entity.MovieType;
 import uz.pdp.anicinema.exception.BadRequestException;
 import uz.pdp.anicinema.mapper.MovieMapper;
 import uz.pdp.anicinema.payload.request.MovieCreateRequest;
 import uz.pdp.anicinema.payload.request.MovieUpdateRequest;
 import uz.pdp.anicinema.payload.response.MovieResponse;
+import uz.pdp.anicinema.repository.GenreRepository;
 import uz.pdp.anicinema.repository.MovieRepository;
+import uz.pdp.anicinema.repository.MovieTypeRepository;
 import uz.pdp.anicinema.service.AttachmentService;
 import uz.pdp.anicinema.service.EpisodeService;
 import uz.pdp.anicinema.service.MovieService;
+import uz.pdp.anicinema.utils.enums.MovieStatus;
 
 import java.util.List;
 
@@ -19,15 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
+    private final MovieMapper movieMapper;
     private final EpisodeService episodeService;
     private final MovieRepository movieRepository;
     private final AttachmentService attachmentService;
-    private final MovieMapper movieMapper;
+    private final GenreRepository genreRepository;
+    private final MovieTypeRepository movieTypeRepository;
 
     @Override
     public void save(MovieCreateRequest request) {
 
         Movie movie = movieMapper.toEntity(request, attachmentService, episodeService);
+
+        Genre genre = genreRepository.findByName(request.getGenre())
+                .orElse(Genre.builder().name(request.getGenre()).build());
+
+        MovieType movieType = movieTypeRepository.findByName(request.getType())
+                .orElse(MovieType.builder().name(request.getType()).build());
+
+        movie.setGenre(genre);
+        movie.setType(movieType);
 
         movieRepository.save(movie);
 
@@ -38,9 +54,22 @@ public class MovieServiceImpl implements MovieService {
 
         Movie movie = movieMapper.toEntity(request, attachmentService, episodeService);
 
-        //todo comments
+        Movie nextSeason = movieRepository.findById(request.getNextSeasonId())
+                .orElseThrow(BadRequestException::movieNotFound);
 
-        movieRepository.save(movie);
+        Genre genre = genreRepository.findByName(request.getGenre())
+                .orElse(Genre.builder().name(request.getGenre()).build());
+
+        MovieType movieType = movieTypeRepository.findByName(request.getType())
+                .orElse(MovieType.builder().name(request.getType()).build());
+
+        movie.setNextSeason(nextSeason);
+        movie.setGenre(genre);
+        movie.setType(movieType);
+
+        nextSeason.setPreviousSeason(movie);
+
+        movieRepository.saveAll(List.of(nextSeason, movie));
 
     }
 
@@ -71,5 +100,35 @@ public class MovieServiceImpl implements MovieService {
                 .stream()
                 .map(movieMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public List<MovieResponse> getAllSoon() {
+
+        return movieRepository.findAllByIsReleased(false)
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+
+    }
+
+    @Override
+    public List<MovieResponse> getAllByStatus(MovieStatus status) {
+
+        return movieRepository.findAllByStatus(status)
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+
+    }
+
+    @Override
+    public List<MovieResponse> getAllTopRated() {
+
+        return movieRepository.findAllTopRated()
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+
     }
 }

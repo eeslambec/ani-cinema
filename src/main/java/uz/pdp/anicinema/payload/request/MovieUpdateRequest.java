@@ -3,6 +3,7 @@ package uz.pdp.anicinema.payload.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import uz.pdp.anicinema.utils.enums.MovieStatus;
 
 import java.util.List;
 
@@ -28,6 +29,14 @@ public class MovieUpdateRequest {
     private String director;
 
     private String country;
+
+    private Boolean isReleased;
+
+    private MovieStatus status;
+
+    private Long nextSeasonId;
+
+    private String type;
 
     private Long trailerId;
 

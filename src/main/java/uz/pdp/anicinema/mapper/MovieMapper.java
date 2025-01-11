@@ -13,17 +13,21 @@ import uz.pdp.anicinema.service.EpisodeService;
 @Mapper(componentModel = "spring")
 public interface MovieMapper {
 
-    @Mapping(target = "thumbnailId", expression = "java(movie.getThumbnail().getId())")
-    @Mapping(target = "bannerId", expression = "java(movie.getBanner().getId())")
-    @Mapping(target = "screenshotIds", expression = "java(movie.getScreenshots().stream().map(uz.pdp.anicinema.entity.Attachment::getId).toList())")
-    @Mapping(target = "commentIds", expression = "java(movie.getComments().stream().map(uz.pdp.anicinema.entity.Comment::getId).toList())")
-    @Mapping(target = "episodeIds", expression = "java(movie.getEpisodes().stream().map(uz.pdp.anicinema.entity.Episode::getId).toList())")
+    @Mapping(target = "thumbnail", expression = "java(movie.getThumbnail().getUrl())")
+    @Mapping(target = "banner", expression = "java(movie.getBanner().getUrl())")
+    @Mapping(target = "screenshots", expression = "java(movie.getScreenshots().stream().map(uz.pdp.anicinema.entity.Attachment::getUrl).toList())")
+    @Mapping(target = "genre", expression = "java(movie.getGenre().getName())")
+    @Mapping(target = "type", expression = "java(movie.getType().getName())")
     MovieResponse toResponse(Movie movie);
 
+    @Mapping(target = "previousSeason", ignore = true)
+    @Mapping(target = "nextSeason", ignore = true)
     @Mapping(target = "trailer", ignore = true)
     @Mapping(target = "releasedCountry", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "genre", ignore = true)
+    @Mapping(target = "type", ignore = true)
     @Mapping(target = "thumbnail", expression = "java(attachmentService.findById(request.getThumbnailId()))")
     @Mapping(target = "banner", expression = "java(attachmentService.findById(request.getBannerId()))")
     @Mapping(target = "isActive", constant = "true")
@@ -31,8 +35,12 @@ public interface MovieMapper {
     @Mapping(target = "episodes", expression = "java(request.getEpisodes().stream().map(episodeService::save).toList())")
     Movie toEntity(MovieCreateRequest request, @Context AttachmentService attachmentService, @Context EpisodeService episodeService);
 
+    @Mapping(target = "previousSeason", ignore = true)
+    @Mapping(target = "nextSeason", ignore = true)
     @Mapping(target = "trailer", ignore = true)
     @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "genre", ignore = true)
+    @Mapping(target = "type", ignore = true)
     @Mapping(target = "releasedCountry", source = "country")
     @Mapping(target = "thumbnail", expression = "java(attachmentService.findById(request.getThumbnailId()))")
     @Mapping(target = "banner", expression = "java(attachmentService.findById(request.getBannerId()))")

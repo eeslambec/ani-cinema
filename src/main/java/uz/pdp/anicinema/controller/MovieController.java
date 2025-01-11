@@ -11,6 +11,7 @@ import uz.pdp.anicinema.payload.response.MessageResponse;
 import uz.pdp.anicinema.service.MovieService;
 import uz.pdp.anicinema.utils.contant.MessageKey;
 import uz.pdp.anicinema.utils.enums.Code;
+import uz.pdp.anicinema.utils.enums.MovieStatus;
 
 import static uz.pdp.anicinema.payload.response.ResponseData.ok;
 import static uz.pdp.anicinema.utils.contant.AppConstant.API_V1;
@@ -52,6 +53,21 @@ public class MovieController {
     @GetMapping("/list")
     public ResponseEntity<?> getAll(){
         return ok(Code.SUCCESS, movieService.getAll());
+    }
+
+    @GetMapping("/list/soon")
+    public ResponseEntity<?> getAllSoon(){
+        return ok(Code.SUCCESS, movieService.getAllSoon());
+    }
+
+    @GetMapping("/list/{status}")
+    public ResponseEntity<?> getAllByStatus(@PathVariable MovieStatus status){
+            return ok(Code.SUCCESS, movieService.getAllByStatus(status));
+    }
+
+    @GetMapping("/list/top-rated")
+    public ResponseEntity<?> getAllTopRated(){
+        return ok(Code.SUCCESS, movieService.getAllTopRated());
     }
 
 }
