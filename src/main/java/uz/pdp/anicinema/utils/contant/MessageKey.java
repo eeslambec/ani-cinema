@@ -20,4 +20,6 @@ public class MessageKey {
     public static final String MOVIE_NOT_FOUND = "movie.not.found";
     public static final String EPISODE_NOT_FOUND = "episode.not.found";
     public static final String ID_NOT_VALID = "id.not.valid";
+    public static final String SHORTS_NOT_FOUND = "shorts.not.found";
+    public static final String COMMENT_NOT_FOUND = "comment.not.found";
 }

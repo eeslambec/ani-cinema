@@ -3,6 +3,7 @@ package uz.pdp.anicinema.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.pdp.anicinema.entity.Attachment;
 import uz.pdp.anicinema.entity.User;
 import uz.pdp.anicinema.exception.BadRequestException;
 import uz.pdp.anicinema.payload.request.EmailVerificationRequest;
@@ -12,6 +13,7 @@ import uz.pdp.anicinema.payload.response.JwtResponse;
 import uz.pdp.anicinema.repository.UserRepository;
 import uz.pdp.anicinema.security.CustomUserDetails;
 import uz.pdp.anicinema.security.JwtProvider;
+import uz.pdp.anicinema.service.AttachmentService;
 import uz.pdp.anicinema.service.MailService;
 import uz.pdp.anicinema.service.UserService;
 import uz.pdp.anicinema.utils.enums.Role;
@@ -19,10 +21,7 @@ import uz.pdp.anicinema.utils.enums.UserStatus;
 import uz.pdp.anicinema.utils.validator.RegexValidator;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final MailService mailService;
+    private final AttachmentService attachmentService;
 
     @Override
     public void register(RegisterRequest request) {
@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
                 .email(request.getEmail())
                 .gender(request.getGender())
                 .role(Role.USER)
+                .photo(attachmentService.getDefaultUserPic())
                 .lvl(0L)
                 .status(UserStatus.NOT_VERIFIED)
                 .balance(BigDecimal.ZERO)
@@ -160,5 +161,11 @@ public class UserServiceImpl implements UserService {
 
         return new JwtResponse(token,newRefreshToken);
 
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(BadRequestException::userNotFound);
     }
 }

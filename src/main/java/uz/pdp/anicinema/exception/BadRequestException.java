@@ -59,4 +59,12 @@ public class BadRequestException extends RuntimeException {
     public static BadRequestException episodeNotFound() {
         return badRequestException(EPISODE_NOT_FOUND, DATA_NOT_FOUND);
     }
+
+    public static BadRequestException shortsNotFound() {
+        return badRequestException(SHORTS_NOT_FOUND, DATA_NOT_FOUND);
+    }
+
+    public static BadRequestException commentNotFound() {
+        return badRequestException(COMMENT_NOT_FOUND, DATA_NOT_FOUND);
+    }
 }

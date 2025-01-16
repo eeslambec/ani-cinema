@@ -15,4 +15,5 @@ public interface AttachmentService {
     AttachmentResponse getById(Long id);
     Attachment findById(Long id);
 
+    Attachment getDefaultUserPic();
 }

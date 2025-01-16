@@ -95,6 +95,13 @@ public class AttachmentServiceImpl implements AttachmentService {
                 .orElseThrow(BadRequestException::attachmentNotFound);
     }
 
+    @Override
+    public Attachment getDefaultUserPic() {
+
+        return findById(0L);
+
+    }
+
     private String getExtension(String contentType) {
         if (contentType != null) {
             return "." + contentType.substring(contentType.indexOf("/") + 1);

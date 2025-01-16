@@ -1,6 +1,7 @@
 package uz.pdp.anicinema.service;
 
 import org.springframework.stereotype.Service;
+import uz.pdp.anicinema.entity.User;
 import uz.pdp.anicinema.payload.request.EmailVerificationRequest;
 import uz.pdp.anicinema.payload.request.LoginRequest;
 import uz.pdp.anicinema.payload.request.RegisterRequest;
@@ -16,5 +17,7 @@ public interface UserService {
     JwtResponse login(LoginRequest request);
 
     JwtResponse refresh(String refreshToken);
+
+    User findById(Long id);
 
 }
