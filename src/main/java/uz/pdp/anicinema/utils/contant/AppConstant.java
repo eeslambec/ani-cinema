@@ -13,5 +13,6 @@ public class AppConstant {
     public static final String ATTACHMENT = "/attachment";
     public static final String AUTH = "/auth";
     public static final String COMMENT = "/comment";
+    public static final String SHORTS = "/shorts";
 
 }

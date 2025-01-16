@@ -22,4 +22,6 @@ public class MessageKey {
     public static final String ID_NOT_VALID = "id.not.valid";
     public static final String SHORTS_NOT_FOUND = "shorts.not.found";
     public static final String COMMENT_NOT_FOUND = "comment.not.found";
+    public static final String ATTACHMENT_NOT_VALID = "attachment.not.valid";
+    public static final String PERMISSION_DENIED = "permission.denied";
 }

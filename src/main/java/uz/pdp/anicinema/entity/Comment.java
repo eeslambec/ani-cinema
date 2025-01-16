@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("is_active = true")
+@SQLDelete(sql = "UPDATE comment c SET is_active = false WHERE id = ?")
 public class Comment {
 
     @Id
@@ -33,5 +37,7 @@ public class Comment {
     private List<Comment> replies = new ArrayList<>();
 
     private String text;
+
+    private Boolean isActive;
 
 }

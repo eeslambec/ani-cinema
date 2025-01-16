@@ -1,6 +1,7 @@
 package uz.pdp.anicinema.exception;
 
 import lombok.Getter;
+import uz.pdp.anicinema.utils.contant.MessageKey;
 import uz.pdp.anicinema.utils.enums.Code;
 
 import static uz.pdp.anicinema.utils.contant.MessageKey.*;
@@ -67,4 +68,9 @@ public class BadRequestException extends RuntimeException {
     public static BadRequestException commentNotFound() {
         return badRequestException(COMMENT_NOT_FOUND, DATA_NOT_FOUND);
     }
+
+    public static BadRequestException permissionDenied() {
+        return badRequestException(PERMISSION_DENIED, FORBIDDEN);
+    }
+
 }

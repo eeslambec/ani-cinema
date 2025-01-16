@@ -36,4 +36,14 @@ public class CommentController {
         return ok(SUCCESS, commentService.addReply(commentId, request));
     }
 
+    @GetMapping("/list-by-movie/{movieId}")
+    public ResponseEntity<?> getByMovie(@PathVariable Long movieId) {
+        return ok(SUCCESS, commentService.getAllByMovieId(movieId));
+    }
+
+    @GetMapping("/list-by-shorts/{shortsId}")
+    public ResponseEntity<?> getByShorts(@PathVariable Long shortsId) {
+        return ok(SUCCESS, commentService.getAllByShortsId(shortsId));
+    }
+
 }

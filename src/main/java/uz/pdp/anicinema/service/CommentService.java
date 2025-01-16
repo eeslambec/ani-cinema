@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import uz.pdp.anicinema.payload.request.CommentRequest;
 import uz.pdp.anicinema.payload.response.CommentResponse;
 
+import java.util.List;
+
 @Service
 public interface CommentService {
 
@@ -12,5 +14,9 @@ public interface CommentService {
     void deleteComment(Long commentId);
 
     CommentResponse addReply(Long parentCommentId, CommentRequest request);
+
+    List<CommentResponse> getAllByMovieId(Long movieId);
+
+    List<CommentResponse> getAllByShortsId(Long shortsId);
 
 }

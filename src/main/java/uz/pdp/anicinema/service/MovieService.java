@@ -1,7 +1,6 @@
 package uz.pdp.anicinema.service;
 
 import org.springframework.stereotype.Service;
-import uz.pdp.anicinema.entity.Movie;
 import uz.pdp.anicinema.payload.request.MovieCreateRequest;
 import uz.pdp.anicinema.payload.request.MovieUpdateRequest;
 import uz.pdp.anicinema.payload.response.MovieResponse;

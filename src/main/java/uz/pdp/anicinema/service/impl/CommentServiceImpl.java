@@ -14,11 +14,12 @@ import uz.pdp.anicinema.payload.response.CommentResponse;
 import uz.pdp.anicinema.repository.CommentRepository;
 import uz.pdp.anicinema.repository.MovieRepository;
 import uz.pdp.anicinema.repository.ShortsRepository;
+import uz.pdp.anicinema.security.CustomUserDetails;
 import uz.pdp.anicinema.service.CommentService;
 import uz.pdp.anicinema.service.UserService;
+import uz.pdp.anicinema.utils.SecurityUtils;
 import uz.pdp.anicinema.utils.enums.VideoType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,10 +27,10 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final UserService userService;
-    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
     private final MovieRepository movieRepository;
     private final ShortsRepository shortsRepository;
-    private final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     public CommentResponse addComment(CommentRequest request) {
@@ -67,14 +68,24 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long commentId) {
 
+        CustomUserDetails currentUser = SecurityUtils.getCurrentUser();
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(BadRequestException::commentNotFound);
 
-        if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
-            commentRepository.deleteAll(comment.getParent().getReplies());
+        if (currentUser != null && currentUser.getUserId().equals(comment.getUser().getId())) {
+
+            if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
+                commentRepository.deleteAll(comment.getReplies());
+            }
+
+            commentRepository.delete(comment);
+
+            return;
+
         }
 
-        commentRepository.delete(comment);
+        throw BadRequestException.permissionDenied();
 
     }
 
@@ -93,6 +104,22 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(reply);
 
         return commentMapper.toResponse(parentComment);
+    }
+
+    @Override
+    public List<CommentResponse> getAllByMovieId(Long movieId) {
+        return commentRepository.findAllByMovieId(movieId)
+                .stream()
+                .map(commentMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<CommentResponse> getAllByShortsId(Long shortsId) {
+        return commentRepository.findAllByShortsId(shortsId)
+                .stream()
+                .map(commentMapper::toResponse)
+                .toList();
     }
 
 }

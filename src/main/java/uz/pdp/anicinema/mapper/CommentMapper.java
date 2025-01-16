@@ -19,6 +19,7 @@ public interface CommentMapper {
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "isActive" , constant = "true")
     @Mapping(target = "text", source = "request.comment")
     @Mapping(target = "replies", expression = "java(new java.util.ArrayList<>())")
     Comment toEntity(CommentRequest request, User user);
