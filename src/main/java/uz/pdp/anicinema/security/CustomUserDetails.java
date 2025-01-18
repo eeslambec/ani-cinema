@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.anicinema.entity.User;
 import uz.pdp.anicinema.utils.enums.Role;
-import uz.pdp.anicinema.utils.enums.UserStatus;
+import uz.pdp.anicinema.utils.enums.Status;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String password;
     private Role role;
-    private UserStatus status;
+    private Status status;
 
     public static CustomUserDetails from(User user) {
         CustomUserDetails userDetails = new CustomUserDetails();
@@ -44,7 +44,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return status != UserStatus.DELETED;
+        return status != Status.DELETED;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status == UserStatus.ACTIVE;
+        return status == Status.ACTIVE;
     }
 
 }

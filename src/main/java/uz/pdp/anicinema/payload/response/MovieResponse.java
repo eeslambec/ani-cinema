@@ -30,8 +30,6 @@ public class MovieResponse {
 
     private String releasedCountry;
 
-    private Boolean isActive;
-
     private Trailer trailer;
 
     private String banner;

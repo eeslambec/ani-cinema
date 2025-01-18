@@ -13,7 +13,7 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
 
     List<Movie> findAllByIsReleased(Boolean isReleased);
 
-    List<Movie> findAllByStatus(MovieStatus status);
+    List<Movie> findAllByMovieStatus(MovieStatus status);
 
     @Query("SELECT m FROM Movie m ORDER BY m.rating LIMIT 100")
     List<Movie> findAllTopRated();

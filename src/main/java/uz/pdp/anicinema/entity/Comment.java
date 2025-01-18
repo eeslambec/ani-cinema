@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import uz.pdp.anicinema.utils.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLRestriction("is_active = true")
-@SQLDelete(sql = "UPDATE comment c SET is_active = false WHERE id = ?")
+@SQLRestriction("status = 'ACTIVE'")
+@SQLDelete(sql = "UPDATE comment c SET status = 'DELETED' WHERE id = ?")
 public class Comment {
 
     @Id
@@ -38,6 +39,7 @@ public class Comment {
 
     private String text;
 
-    private Boolean isActive;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 }

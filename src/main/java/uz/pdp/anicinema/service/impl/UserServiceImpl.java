@@ -17,7 +17,7 @@ import uz.pdp.anicinema.service.AttachmentService;
 import uz.pdp.anicinema.service.MailService;
 import uz.pdp.anicinema.service.UserService;
 import uz.pdp.anicinema.utils.enums.Role;
-import uz.pdp.anicinema.utils.enums.UserStatus;
+import uz.pdp.anicinema.utils.enums.Status;
 import uz.pdp.anicinema.utils.validator.RegexValidator;
 
 import java.math.BigDecimal;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
             User user = optionalUser.get();
 
-            if(user.getStatus() == UserStatus.NOT_VERIFIED) {
+            if(user.getStatus() == Status.NOT_VERIFIED) {
 
                 mailService.sendVerificationCode(request.getEmail());
 
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
             User user = optionalUser.get();
 
-            if(user.getStatus() == UserStatus.NOT_VERIFIED) {
+            if(user.getStatus() == Status.NOT_VERIFIED) {
 
                 mailService.sendVerificationCode(request.getEmail());
 
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
                 .role(Role.USER)
                 .photo(attachmentService.getDefaultUserPic())
                 .lvl(0L)
-                .status(UserStatus.NOT_VERIFIED)
+                .status(Status.NOT_VERIFIED)
                 .balance(BigDecimal.ZERO)
                 .build();
 
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
             User user = userRepository.findByEmail(request.getEmail()).orElseThrow(BadRequestException::userNotFound);
 
-            user.setStatus(UserStatus.ACTIVE);
+            user.setStatus(Status.ACTIVE);
 
             user = userRepository.save(user);
 
