@@ -226,7 +226,7 @@ public class UserServiceImpl implements UserService {
 
         for (User user : all) {
 
-            if (user.getStatus() == UserStatus.ACTIVE)
+            if (user.getStatus() == Status.ACTIVE)
 
                 activeUsers.add(user);
 
