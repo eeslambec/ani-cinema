@@ -19,4 +19,6 @@ public interface CommentService {
 
     List<CommentResponse> getAllByShortsId(Long shortsId);
 
+    List<CommentResponse> getAllActive();
+
 }

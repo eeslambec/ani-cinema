@@ -21,6 +21,11 @@ import uz.pdp.anicinema.utils.enums.UserStatus;
 import uz.pdp.anicinema.utils.validator.RegexValidator;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -167,5 +172,84 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(BadRequestException::userNotFound);
+    }
+
+    @Override
+    public List<User> findAllSubscribed() {
+        List<User> all = userRepository.findAll();
+
+        List<User> subscribed = new ArrayList<>();
+
+        for (User user : all) {
+
+            LocalDateTime parsedTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(
+
+                    user.getSubscription().getEndDate()),
+
+                    ZoneId.of("Asia/Uzbekistan"));
+
+            if (user.getSubscription().getPlan() != null && parsedTime.isAfter(LocalDateTime.now()))
+
+                subscribed.add(user);
+
+        }
+        return subscribed;
+    }
+
+    @Override
+    public List<User> findAllAdmins() {
+
+        List<User> all = userRepository.findAll();
+
+        List<User> admins = new ArrayList<>();
+
+        for (User user : all) {
+
+            if (user.getRole() == Role.ADMIN ||
+
+                    user.getRole() == Role.SUPER_ADMIN ||
+
+                    user.getRole() == Role.MODERATOR)
+
+                admins.add(user);
+
+        }
+        return admins;
+    }
+
+    @Override
+    public List<User> findAllActiveUsers() {
+
+        List<User> all = userRepository.findAll();
+
+        List<User> activeUsers = new ArrayList<>();
+
+        for (User user : all) {
+
+            if (user.getStatus() == UserStatus.ACTIVE)
+
+                activeUsers.add(user);
+
+        }
+
+        return activeUsers;
+
+    }
+
+    @Override
+    public Long countAllLikedMovies() {
+
+        List<User> allActiveUsers = findAllActiveUsers();
+
+        long count = 0L;
+
+        for (User user : allActiveUsers) {
+
+            count += user.getLikedMovies().size();
+
+        }
+
+        return count;
+
     }
 }
