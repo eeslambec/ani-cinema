@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.pdp.anicinema.utils.enums.Gender;
 import uz.pdp.anicinema.utils.enums.Role;
-import uz.pdp.anicinema.utils.enums.UserStatus;
+import uz.pdp.anicinema.utils.enums.Status;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -49,7 +49,7 @@ public class User {
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    private Status status;
 
     private Long lvl;
 

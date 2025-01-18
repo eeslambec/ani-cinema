@@ -27,10 +27,11 @@ public interface MovieMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "genre", ignore = true)
     @Mapping(target = "type", ignore = true)
+    @Mapping(target = "movieStatus", expression = "java(uz.pdp.anicinema.utils.enums.MovieStatus.WAITING)")
     @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "thumbnail", expression = "java(attachmentService.findById(request.getThumbnailId()))")
     @Mapping(target = "banner", expression = "java(attachmentService.findById(request.getBannerId()))")
-    @Mapping(target = "isActive", constant = "true")
+    @Mapping(target = "status", expression = "java(uz.pdp.anicinema.utils.enums.Status.ACTIVE)")
     @Mapping(target = "screenshots", expression = "java(request.getScreenshotIds().stream().map(attachmentService::findById).toList())")
     @Mapping(target = "episodes", expression = "java(request.getEpisodes().stream().map(episodeService::save).toList())")
     Movie toEntity(MovieCreateRequest request, @Context AttachmentService attachmentService, @Context EpisodeService episodeService);
@@ -44,7 +45,8 @@ public interface MovieMapper {
     @Mapping(target = "releasedCountry", source = "country")
     @Mapping(target = "thumbnail", expression = "java(attachmentService.findById(request.getThumbnailId()))")
     @Mapping(target = "banner", expression = "java(attachmentService.findById(request.getBannerId()))")
-    @Mapping(target = "isActive", constant = "true")
+    @Mapping(target = "status", expression = "java(uz.pdp.anicinema.utils.enums.Status.ACTIVE)")
+    @Mapping(target = "movieStatus", expression = "java(uz.pdp.anicinema.utils.enums.MovieStatus.WAITING)")
     @Mapping(target = "screenshots", expression = "java(request.getScreenshotIds().stream().map(attachmentService::findById).toList())")
     @Mapping(target = "episodes", expression = "java(request.getEpisodeIds().stream().map(episodeService::getById).toList())")
     Movie toEntity(MovieUpdateRequest request, @Context AttachmentService attachmentService, @Context EpisodeService episodeService);

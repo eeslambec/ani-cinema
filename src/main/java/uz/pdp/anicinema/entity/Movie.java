@@ -7,8 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import uz.pdp.anicinema.utils.enums.MovieStatus;
+import uz.pdp.anicinema.utils.enums.Status;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLRestriction("is_active = true")
+@SQLDelete(sql = "UPDATE movie m SET status = 'DELETED' WHERE id = ?")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +48,13 @@ public class Movie {
 
     private String releasedCountry;
 
-    private Boolean isActive;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private Boolean isReleased;
 
     @Enumerated(EnumType.STRING)
-    private MovieStatus status;
+    private MovieStatus movieStatus;
 
     @ManyToOne
     private Trailer trailer;

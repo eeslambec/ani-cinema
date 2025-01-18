@@ -1,6 +1,6 @@
 package uz.pdp.anicinema.utils.enums;
 
-public enum UserStatus {
+public enum Status {
     ACTIVE,
     INACTIVE,
     DELETED,

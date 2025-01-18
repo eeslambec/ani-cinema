@@ -27,8 +27,8 @@ public class MovieServiceImpl implements MovieService {
     private final MovieMapper movieMapper;
     private final EpisodeService episodeService;
     private final MovieRepository movieRepository;
-    private final AttachmentService attachmentService;
     private final GenreRepository genreRepository;
+    private final AttachmentService attachmentService;
     private final MovieTypeRepository movieTypeRepository;
 
     @Override
@@ -79,9 +79,8 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(BadRequestException::movieNotFound);
 
-        movie.setIsActive(false);
+        movieRepository.delete(movie);
 
-        movieRepository.save(movie);
     }
 
     @Override
@@ -115,7 +114,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieResponse> getAllByStatus(MovieStatus status) {
 
-        return movieRepository.findAllByStatus(status)
+        return movieRepository.findAllByMovieStatus(status)
                 .stream()
                 .map(movieMapper::toResponse)
                 .toList();
