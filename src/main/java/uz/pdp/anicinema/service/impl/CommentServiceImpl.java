@@ -18,8 +18,10 @@ import uz.pdp.anicinema.security.CustomUserDetails;
 import uz.pdp.anicinema.service.CommentService;
 import uz.pdp.anicinema.service.UserService;
 import uz.pdp.anicinema.utils.SecurityUtils;
+import uz.pdp.anicinema.utils.enums.Status;
 import uz.pdp.anicinema.utils.enums.VideoType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -120,6 +122,25 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(commentMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public List<CommentResponse> getAllActive() {
+
+        List<Comment> all = commentRepository.findAll();
+
+        List<CommentResponse> allActive = new ArrayList<>();
+
+        for (Comment comment : all) {
+
+            if (comment.getStatus() == Status.ACTIVE)
+
+                allActive.add(commentMapper.toResponse(comment));
+
+        }
+
+        return allActive;
+
     }
 
 }

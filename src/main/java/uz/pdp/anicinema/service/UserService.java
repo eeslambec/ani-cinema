@@ -7,6 +7,8 @@ import uz.pdp.anicinema.payload.request.LoginRequest;
 import uz.pdp.anicinema.payload.request.RegisterRequest;
 import uz.pdp.anicinema.payload.response.JwtResponse;
 
+import java.util.List;
+
 @Service
 public interface UserService {
 
@@ -20,4 +22,11 @@ public interface UserService {
 
     User findById(Long id);
 
+    List<User> findAllSubscribed();
+
+    List<User> findAllAdmins();
+
+    List<User> findAllActiveUsers();
+
+    Long countAllLikedMovies();
 }

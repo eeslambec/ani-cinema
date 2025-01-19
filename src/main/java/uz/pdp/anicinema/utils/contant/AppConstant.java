@@ -14,5 +14,6 @@ public class AppConstant {
     public static final String AUTH = "/auth";
     public static final String COMMENT = "/comment";
     public static final String SHORTS = "/shorts";
+    public static final String USER = "/user";
 
 }

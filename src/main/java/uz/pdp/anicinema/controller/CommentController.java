@@ -46,4 +46,9 @@ public class CommentController {
         return ok(SUCCESS, commentService.getAllByShortsId(shortsId));
     }
 
+    @GetMapping("/list-active")
+    public ResponseEntity<?> getActiveComments() {
+        return ok(SUCCESS, commentService.getAllActive());
+    }
+
 }
