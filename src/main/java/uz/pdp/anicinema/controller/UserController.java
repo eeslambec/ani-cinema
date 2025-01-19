@@ -23,18 +23,18 @@ public class UserController {
     @GetMapping("/subscribed")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> subscribed(){
-        return ok(Code.SUCCESS, userService.findAllSubscribed());
+        return ok(Code.SUCCESS, userService.getAllSubscribed());
     }
 
     @GetMapping("/list-admins")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<?> listAdmins(){
-        return ok(Code.SUCCESS, userService.findAllAdmins());
+        return ok(Code.SUCCESS, userService.getAllAdmins());
     }
-    @GetMapping("/list-active-users")
+    @GetMapping("/list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    public ResponseEntity<?> listActiveUsers(){
-        return ok(Code.SUCCESS, userService.findAllActiveUsers());
+    public ResponseEntity<?> getAll(){
+        return ok(Code.SUCCESS, userService.getAll());
     }
 
     @GetMapping("/list-liked")

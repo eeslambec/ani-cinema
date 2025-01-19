@@ -2,6 +2,7 @@ package uz.pdp.anicinema.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -12,6 +13,10 @@ public class DateUtils {
 
     public static Long toMillis(LocalDateTime localDateTime) {
         return localDateTime.atZone(asiaTashkent).toInstant().toEpochMilli();
+    }
+
+    public static LocalDateTime toLocalDateTime(Long millis) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), asiaTashkent);
     }
 
 }

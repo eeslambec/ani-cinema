@@ -20,9 +20,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLRestriction("is_active = true")
+@SQLRestriction("status = 'ACTIVE'")
 @SQLDelete(sql = "UPDATE movie m SET status = 'DELETED' WHERE id = ?")
-public class Movie {
+public class Movie extends Auditing{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

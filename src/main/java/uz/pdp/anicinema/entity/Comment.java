@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @SQLRestriction("status = 'ACTIVE'")
 @SQLDelete(sql = "UPDATE comment c SET status = 'DELETED' WHERE id = ?")
-public class Comment {
+public class Comment extends Auditing{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

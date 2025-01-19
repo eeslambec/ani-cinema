@@ -18,7 +18,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trailer {
+public class Trailer extends Auditing{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

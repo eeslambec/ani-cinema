@@ -6,6 +6,7 @@ import uz.pdp.anicinema.payload.request.EmailVerificationRequest;
 import uz.pdp.anicinema.payload.request.LoginRequest;
 import uz.pdp.anicinema.payload.request.RegisterRequest;
 import uz.pdp.anicinema.payload.response.JwtResponse;
+import uz.pdp.anicinema.payload.response.UserResponse;
 
 import java.util.List;
 
@@ -22,11 +23,11 @@ public interface UserService {
 
     User findById(Long id);
 
-    List<User> findAllSubscribed();
+    List<UserResponse> getAllSubscribed();
 
-    List<User> findAllAdmins();
+    List<UserResponse> getAllAdmins();
 
-    List<User> findAllActiveUsers();
+    List<UserResponse> getAll();
 
     Long countAllLikedMovies();
 }

@@ -3,19 +3,21 @@ package uz.pdp.anicinema.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.pdp.anicinema.entity.Attachment;
 import uz.pdp.anicinema.entity.User;
 import uz.pdp.anicinema.exception.BadRequestException;
+import uz.pdp.anicinema.mapper.UserMapper;
 import uz.pdp.anicinema.payload.request.EmailVerificationRequest;
 import uz.pdp.anicinema.payload.request.LoginRequest;
 import uz.pdp.anicinema.payload.request.RegisterRequest;
 import uz.pdp.anicinema.payload.response.JwtResponse;
+import uz.pdp.anicinema.payload.response.UserResponse;
 import uz.pdp.anicinema.repository.UserRepository;
 import uz.pdp.anicinema.security.CustomUserDetails;
 import uz.pdp.anicinema.security.JwtProvider;
 import uz.pdp.anicinema.service.AttachmentService;
 import uz.pdp.anicinema.service.MailService;
 import uz.pdp.anicinema.service.UserService;
+import uz.pdp.anicinema.utils.DateUtils;
 import uz.pdp.anicinema.utils.enums.Role;
 import uz.pdp.anicinema.utils.enums.Status;
 import uz.pdp.anicinema.utils.validator.RegexValidator;
@@ -32,15 +34,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final MailService mailService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final AttachmentService attachmentService;
+    private final UserMapper userMapper;
 
     @Override
     public void register(RegisterRequest request) {
-
 
         if (RegexValidator.email(request.getEmail())) {
             throw BadRequestException.emailNoValid();
@@ -175,81 +177,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllSubscribed() {
-        List<User> all = userRepository.findAll();
-
-        List<User> subscribed = new ArrayList<>();
-
-        for (User user : all) {
-
-            LocalDateTime parsedTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(
-
-                    user.getSubscription().getEndDate()),
-
-                    ZoneId.of("Asia/Uzbekistan"));
-
-            if (user.getSubscription().getPlan() != null && parsedTime.isAfter(LocalDateTime.now()))
-
-                subscribed.add(user);
-
-        }
-        return subscribed;
+    public List<UserResponse> getAllSubscribed() {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user.getSubscription() != null)
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     @Override
-    public List<User> findAllAdmins() {
-
-        List<User> all = userRepository.findAll();
-
-        List<User> admins = new ArrayList<>();
-
-        for (User user : all) {
-
-            if (user.getRole() == Role.ADMIN ||
-
-                    user.getRole() == Role.SUPER_ADMIN ||
-
-                    user.getRole() == Role.MODERATOR)
-
-                admins.add(user);
-
-        }
-        return admins;
+    public List<UserResponse> getAllAdmins() {
+        return userRepository.findAll()
+                .stream()
+                .filter(user->!user.getRole().equals(Role.USER))
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     @Override
-    public List<User> findAllActiveUsers() {
-
-        List<User> all = userRepository.findAll();
-
-        List<User> activeUsers = new ArrayList<>();
-
-        for (User user : all) {
-
-            if (user.getStatus() == Status.ACTIVE)
-
-                activeUsers.add(user);
-
-        }
-
-        return activeUsers;
-
+    public List<UserResponse> getAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     @Override
     public Long countAllLikedMovies() {
-
-        List<User> allActiveUsers = findAllActiveUsers();
-
-        long count = 0L;
-
-        for (User user : allActiveUsers) {
-
-            count += user.getLikedMovies().size();
-
-        }
-
-        return count;
-
+        return userRepository.findAll()
+                .stream()
+                .mapToLong(user->user.getLikedMovies().size())
+                .sum();
     }
 }

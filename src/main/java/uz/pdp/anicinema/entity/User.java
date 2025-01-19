@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import uz.pdp.anicinema.utils.enums.Gender;
 import uz.pdp.anicinema.utils.enums.Role;
 import uz.pdp.anicinema.utils.enums.Status;
@@ -21,7 +23,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
+@SQLRestriction("status = ACTIVE")
+@SQLDelete(sql = "UPDATE users SET status = 'DELETED' WHERE id = ?")
+public class User extends Auditing{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
